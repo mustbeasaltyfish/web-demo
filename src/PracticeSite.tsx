@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/logo.png";
 
 /**
  * 单文件、现代化、响应式、极简而高级的实践团官网
