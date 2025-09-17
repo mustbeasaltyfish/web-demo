@@ -2,10 +2,11 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { 
   MapPin, Mountain, Users, Leaf, GraduationCap, Camera, Share2, Mail, Calendar,
-  Sparkles, ArrowRight, Landmark, HeartHandshake, BookOpenText, Building2
+  Sparkles, ArrowRight, Landmark, HeartHandshake, BookOpenText, Building2, Film
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import logo from "@/assets/logo.svg";
 
 /**
  * 单文件、现代化、响应式、极简而高级的实践团官网
@@ -62,6 +63,27 @@ const partners = [
   "北京交通大学", "地方政府与乡村振兴部门", "中学与村社组织", "本地企业与合作社"
 ];
 
+const videoCollections = [
+  {
+    title: "传承之路",
+    subtitle: "记录非遗与乡土文化的延续",
+    file: "/videos/heritage.mp4",
+    description: "即将上线：我们将以沉浸式影像，呈现侗寨、桥梁与少数民族文化的守护故事。",
+  },
+  {
+    title: "振兴之路",
+    subtitle: "见证产业与乡村的协同升级",
+    file: "/videos/revitalization.mp4",
+    description: "即将上线：聚焦村超、产业链与数字治理的协同，展现乡村振兴的具体实践。",
+  },
+  {
+    title: "青春之路",
+    subtitle: "记录青年返乡共创的脚步",
+    file: "/videos/youth.mp4",
+    description: "即将上线：跟随青年团队的脚步，讲述跨学科共创的真实瞬间与成长。",
+  },
+];
+
 type SectionProps = {
   id: string;
   title: string;
@@ -115,13 +137,14 @@ export default function PracticeSite() {
       <header className="sticky top-0 z-40 border-b backdrop-blur bg-background/70">
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
           <a href="#home" className="group inline-flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 text-white shadow-md">黔</span>
+            <img src={logo} alt="黔路兴农 · 青智赋能 logo" className="h-10 w-10 rounded-full border border-indigo-200 bg-white object-cover shadow-sm" />
             <span className="font-semibold tracking-tight">黔路兴农 · 青智赋能</span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#about" className="hover:text-foreground">愿景</a>
             <a href="#route" className="hover:text-foreground">路线</a>
             <a href="#projects" className="hover:text-foreground">项目</a>
+            <a href="#videos" className="hover:text-foreground">记录视频</a>
             <a href="#impact" className="hover:text-foreground">影响</a>
             <a href="#team" className="hover:text-foreground">团队</a>
             <a href="#contact" className="hover:text-foreground">联系</a>
@@ -261,6 +284,41 @@ export default function PracticeSite() {
                 <div className="mt-4">
                   <Button variant="outline" size="sm" className="gap-1">了解详情 <ArrowRight className="w-4 h-4"/></Button>
                 </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      {/* 记录视频 */}
+      <Section id="videos" title="记录视频" subtitle="以影像为证，我们持续记录人与乡土、科技与产业之间的真实连接。">
+        <div className="grid gap-6 md:grid-cols-3">
+          {videoCollections.map((video) => (
+            <Card key={video.title} className="border bg-background/60 backdrop-blur overflow-hidden">
+              <CardHeader className="gap-2 space-y-2">
+                <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-600 dark:text-emerald-400">
+                    <Film className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <div className="text-sm font-medium text-foreground">{video.title}</div>
+                    <div className="text-xs text-muted-foreground">{video.subtitle}</div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="aspect-video w-full overflow-hidden rounded-xl border bg-muted/40">
+                  <video
+                    controls
+                    preload="metadata"
+                    className="h-full w-full bg-black/80 object-cover"
+                    src={video.file}
+                  >
+                    您的浏览器暂不支持 video 标签。
+                  </video>
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">{video.description}</p>
+                <p className="text-[11px] text-muted-foreground">如无法播放，请替换 public/videos 目录中的占位视频文件。</p>
               </CardContent>
             </Card>
           ))}

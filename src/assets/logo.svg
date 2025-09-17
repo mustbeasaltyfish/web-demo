@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <defs>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#e6f7ff" />
+      <stop offset="1" stop-color="#7bd1f0" />
+    </radialGradient>
+    <linearGradient id="ringGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6dc1e4" />
+      <stop offset="1" stop-color="#266bc2" />
+    </linearGradient>
+    <linearGradient id="roadGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6eb6ff" />
+      <stop offset="1" stop-color="#1f4186" />
+    </linearGradient>
+  </defs>
+  <circle cx="320" cy="320" r="310" fill="url(#ringGradient)" />
+  <circle cx="320" cy="320" r="270" fill="white" stroke="#6dc1e4" stroke-width="18" />
+  <circle cx="320" cy="320" r="220" fill="url(#bgGradient)" />
+
+  <g opacity="0.9">
+    <path d="M120 380 C200 260, 240 220, 320 210 C400 200, 460 240, 520 340 L520 430 L120 430 Z" fill="#7cb3ff" />
+    <path d="M150 410 C200 360, 260 340, 320 340 C360 340, 420 360, 480 420 L480 450 L150 450 Z" fill="#97d4a6" opacity="0.8" />
+    <path d="M260 410 C280 390, 320 370, 360 370 C390 370, 430 390, 460 420" fill="none" stroke="#3b7ee8" stroke-width="18" stroke-linecap="round" />
+    <path d="M260 410 C284 382, 320 366, 360 368 C386 368, 416 382, 444 402" fill="none" stroke="#f4d35e" stroke-width="6" stroke-linecap="round" />
+    <path d="M190 380 C220 320, 260 280, 320 270 C360 265, 410 290, 450 340" fill="#5593cf" opacity="0.75" />
+    <path d="M240 300 Q280 240 320 260 Q360 280 390 320" fill="#4f89c4" opacity="0.6" />
+    <path d="M320 190 C260 190, 210 220, 190 260 C240 240, 280 250, 320 250 C360 250, 410 240, 450 260 C430 220, 380 190, 320 190 Z" fill="#8ad0ff" />
+    <rect x="302" y="205" width="12" height="70" rx="6" fill="#ffffff" opacity="0.6" />
+    <circle cx="308" cy="200" r="10" fill="#ffffff" opacity="0.6" />
+  </g>
+
+  <defs>
+    <path id="topTextPath" d="M150 145 A220 220 0 0 1 490 145" fill="none" />
+    <path id="bottomTextPath" d="M490 495 A220 220 0 0 1 150 495" fill="none" />
+  </defs>
+  <text font-size="52" fill="#1f4186" font-family="'Noto Sans SC', 'PingFang SC', 'WenQuanYi Micro Hei', sans-serif">
+    <textPath href="#topTextPath" startOffset="50%" text-anchor="middle">黔路兴农</textPath>
+  </text>
+  <text font-size="48" fill="#ffffff" font-family="'Noto Sans SC', 'PingFang SC', 'WenQuanYi Micro Hei', sans-serif" font-weight="500">
+    <textPath href="#bottomTextPath" startOffset="50%" text-anchor="middle">青智赋能</textPath>
+  </text>
+</svg>
