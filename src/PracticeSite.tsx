@@ -1,12 +1,14 @@
-import { type ReactNode } from "react";
-import { motion } from "framer-motion";
-import { 
+import { type ReactNode, useRef } from "react";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import {
   MapPin, Mountain, Users, Leaf, GraduationCap, Camera, Share2, Mail, Calendar,
   Sparkles, ArrowRight, Landmark, HeartHandshake, BookOpenText, Building2, Film
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/logo.png";
+import heroPlaceholder from "@/assets/hero-placeholder.jpg";
+import { cn } from "@/lib/utils";
 
 /**
  * 单文件、现代化、响应式、极简而高级的实践团官网
@@ -122,15 +124,36 @@ const Section = ({ id, title, subtitle, children }: SectionProps) => (
 
 type PillProps = {
   children: ReactNode;
+  className?: string;
 };
 
-const Pill = ({ children }: PillProps) => (
-  <span className="rounded-full border bg-background/70 backdrop-blur px-3 py-1 text-xs text-muted-foreground">
+const Pill = ({ children, className }: PillProps) => (
+  <span
+    className={cn(
+      "rounded-full border bg-background/70 backdrop-blur px-3 py-1 text-xs text-muted-foreground",
+      className,
+    )}
+  >
     {children}
   </span>
 );
 
 export default function PracticeSite() {
+  const heroRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const overlayOpacity = useTransform(scrollYProgress, [0.02, 0.26], [0, 1]);
+  const heroContentOpacity = useTransform(scrollYProgress, [0.05, 0.22], [0, 1]);
+  const heroContentTranslate = useTransform(scrollYProgress, [0.05, 0.28], [310, 250]);
+  const heroSecondaryOpacity = useTransform(scrollYProgress, [0.05, 0.22], [0, 0.22]);
+  const heroSecondaryBorderOpacity = useTransform(scrollYProgress, [0.05, 0.22], [0, 0.35]);
+  const heroSecondaryBlur = useTransform(scrollYProgress, [0.05, 0.22], [0, 10]);
+  const heroSecondaryBg = useMotionTemplate`rgba(255,255,255,${heroSecondaryOpacity})`;
+  const heroSecondaryBorder = useMotionTemplate`rgba(255,255,255,${heroSecondaryBorderOpacity})`;
+  const heroSecondaryBackdrop = useMotionTemplate`blur(${heroSecondaryBlur}px)`;
+
   return (
     <div className="min-h-screen bg-[radial-gradient(80%_80%_at_10%_10%,rgba(99,102,241,0.12),transparent),radial-gradient(60%_60%_at_90%_10%,rgba(16,185,129,0.10),transparent)] dark:bg-[radial-gradient(80%_80%_at_10%_10%,rgba(99,102,241,0.18),transparent),radial-gradient(60%_60%_at_90%_10%,rgba(16,185,129,0.16),transparent)] text-foreground">
       {/* 顶部导航 */}
@@ -156,62 +179,107 @@ export default function PracticeSite() {
       </header>
 
       {/* 首屏 Hero */}
-      <section id="home" className="relative overflow-hidden">
-        <div className="mx-auto max-w-6xl px-4 py-20 md:py-28">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <div className="inline-flex items-center gap-2 rounded-full border bg-background/70 backdrop-blur px-3 py-1 text-xs">
-                <Sparkles className="w-4 h-4"/>
+      <section
+        id="home"
+        ref={heroRef}
+        className="relative isolate min-h-[140vh] overflow-hidden md:min-h-[150vh]"
+      >
+        <div className="absolute inset-0">
+          <img
+            src={heroPlaceholder}
+            alt="贵州山地与桥梁调研的占位图"
+            className="h-full w-full object-cover"
+          />
+          <motion.div
+            style={{ opacity: overlayOpacity }}
+            className="absolute inset-0"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950/55 via-slate-950/35 to-slate-950/60" />
+            <div className="absolute inset-0 bg-white/12 mix-blend-soft-light" />
+          </motion.div>
+        </div>
+        <motion.div
+          style={{ opacity: overlayOpacity }}
+          className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950 via-slate-950/60 to-transparent md:h-32"
+        />
+        <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-6xl items-end px-4 pb-16 pt-14 md:pb-24 md:pt-20">
+          <motion.div
+            style={{ opacity: heroContentOpacity, y: heroContentTranslate }}
+            className="grid w-full gap-12 lg:grid-cols-[1.15fr,0.85fr]"
+          >
+            <div className="max-w-2xl text-slate-100">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-slate-100/90">
+                <Sparkles className="h-3.5 w-3.5 text-emerald-200" />
                 走进西南腹地 · 连接乡土与科技 · 共建可持续未来
               </div>
-              <h1 className="mt-4 text-3xl md:text-5xl font-semibold tracking-tight leading-[1.15]">
+              <h1 className="mt-6 text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl md:leading-[1.15]">
                 黔路兴农，青智赋能
               </h1>
-              <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-xl">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-200 md:text-lg">
                 我们是一支来自高校的跨学科社会实践团，沿“福泉—榕江—新店—贵安—贵阳”展开调研，
                 以数据与影像记录在地故事，以工程化思维共创产业与人才的可持续方案。
               </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <Button size="lg" className="gap-2">
-                  申请共创 <HeartHandshake className="w-4 h-4"/>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button size="lg" className="gap-2 bg-white/95 text-slate-900 hover:bg-white">
+                  申请共创 <HeartHandshake className="h-4 w-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2" asChild>
-                  <a href="#projects">查看项目 <ArrowRight className="w-4 h-4"/></a>
+                <Button size="lg" variant="outline" className="gap-2 border-white/50 bg-white/10 text-white hover:bg-white/20" asChild>
+                  <a href="#projects">查看项目 <ArrowRight className="h-4 w-4" /></a>
                 </Button>
               </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                <Pill><Calendar className="w-3.5 h-3.5 mr-1 inline"/> 2025 暑期</Pill>
-                <Pill><MapPin className="w-3.5 h-3.5 mr-1 inline"/> 黔南·黔东南·贵安·贵阳</Pill>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Pill className="border-white/30 bg-white/10 text-white/90">
+                  <Calendar className="mr-1 inline h-3.5 w-3.5" /> 2025 暑期
+                </Pill>
+                <Pill className="border-white/30 bg-white/10 text-white/90">
+                  <MapPin className="mr-1 inline h-3.5 w-3.5" /> 黔南·黔东南·贵安·贵阳
+                </Pill>
               </div>
-            </motion.div>
+            </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7 }}
-              className="relative"
+              className="relative flex items-center justify-center rounded-3xl border border-white/25 px-6 py-6 shadow-[0_20px_52px_rgba(15,23,42,0.2)] sm:px-8 sm:py-8"
+              style={{
+                backgroundColor: heroSecondaryBg,
+                borderColor: heroSecondaryBorder,
+                backdropFilter: heroSecondaryBackdrop,
+              }}
             >
-              <div className="aspect-[4/3] w-full rounded-3xl border bg-gradient-to-br from-indigo-500/15 to-emerald-500/15 p-4 md:p-6">
-                <div className="grid h-full w-full grid-cols-2 gap-4">
-                  <div className="rounded-2xl bg-background/70 border backdrop-blur p-4 flex flex-col justify-between">
-                    <div className="flex items-center gap-2 text-sm"><Mountain className="w-4 h-4"/> 大山里的人与桥</div>
-                    <div className="text-xs text-muted-foreground">鸭池河特大桥与乡村公路网的改变</div>
+              <div className="grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+                {[{
+                  icon: <Mountain className="h-5 w-5" />,
+                  title: "大山里的人与桥",
+                  desc: "鸭池河特大桥与乡村公路网的改变",
+                }, {
+                  icon: <Users className="h-5 w-5" />,
+                  title: "人民的‘村超’",
+                  desc: "体育把人团结在一起",
+                }, {
+                  icon: <Leaf className="h-5 w-5" />,
+                  title: "产业向上",
+                  desc: "果园品牌与冷链的故事",
+                }, {
+                  icon: <Building2 className="h-5 w-5" />,
+                  title: "数字中国",
+                  desc: "数据中心、地铁与城市治理",
+                }].map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex min-h-[140px] flex-col justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-5 text-sm text-slate-900 shadow-[0_8px_24px_rgba(15,23,42,0.1)] backdrop-blur-sm"
+                  >
+                    <div className="flex items-center gap-2 font-semibold text-slate-900">
+                      {item.icon}
+                      {item.title}
+                    </div>
+                    <div className="text-xs text-slate-700">{item.desc}</div>
                   </div>
-                  <div className="rounded-2xl bg-background/70 border backdrop-blur p-4 flex flex-col justify-between">
-                    <div className="flex items-center gap-2 text-sm"><Users className="w-4 h-4"/> 人民的‘村超’</div>
-                    <div className="text-xs text-muted-foreground">体育把人团结在一起</div>
-                  </div>
-                  <div className="rounded-2xl bg-background/70 border backdrop-blur p-4 flex flex-col justify-between">
-                    <div className="flex items-center gap-2 text-sm"><Leaf className="w-4 h-4"/> 产业向上</div>
-                    <div className="text-xs text-muted-foreground">果园品牌与冷链的故事</div>
-                  </div>
-                  <div className="rounded-2xl bg-background/70 border backdrop-blur p-4 flex flex-col justify-between">
-                    <div className="flex items-center gap-2 text-sm"><Building2 className="w-4 h-4"/> 数字中国</div>
-                    <div className="text-xs text-muted-foreground">数据中心、地铁与城市治理</div>
-                  </div>
-                </div>
+                ))}
               </div>
             </motion.div>
-          </div>
+          </motion.div>
+        </div>
+        <div className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center text-[10px] uppercase tracking-[0.4em] text-white/70">
+          <span>Scroll</span>
+          <span className="mt-3 h-10 w-px animate-pulse bg-white/60" />
         </div>
       </section>
 
@@ -416,7 +484,7 @@ export default function PracticeSite() {
           <div>© {new Date().getFullYear()} 黔路兴农 · 青智赋能 社会实践团</div>
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5"/> 贵州 · 北京</span>
-            <span className="inline-flex items-center gap-1"><Sparkles className="w-3.5 h-3.5"/> 制作：青年共创实验室</span>
+            <span className="inline-flex items-center gap-1"><Sparkles className="w-3.5 h-3.5"/> 制作：北京交通大学“黔路兴农，青智赋能”实践团</span>
           </div>
         </div>
       </footer>
