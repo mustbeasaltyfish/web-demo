@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/logo.png";
-import heroPlaceholder from "@/assets/hero-placeholder.jpg";
+import heroPlaceholder from "@/assets/hero-placeholder.webp";
 import { cn } from "@/lib/utils";
 
 /**
